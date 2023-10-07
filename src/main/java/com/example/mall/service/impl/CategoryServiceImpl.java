@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryMapper categoryMapper;
+
     @Override
     public void add(AddCategoryReq addCategoryReq) {
         Category category = new Category();
@@ -25,9 +26,21 @@ public class CategoryServiceImpl implements CategoryService {
 
         int count = categoryMapper.insertSelective(category);
 
-        if(count==0){
+        if (count == 0) {
             throw new MallException(MallExceptionEnum.CREATE_FAILED);
 
+        }
+    }
+
+    @Override
+    public void delete(Integer id) {
+        Category category = categoryMapper.selectByPrimaryKey(id);
+        if (category == null) {
+            throw new MallException(MallExceptionEnum.DELETE_FAILED);
+        }
+        int count = categoryMapper.deleteByPrimaryKey(id);
+        if (count == 0) {
+            throw new MallException(MallExceptionEnum.DELETE_FAILED);
         }
     }
 }
