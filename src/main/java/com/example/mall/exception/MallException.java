@@ -10,11 +10,15 @@ public class MallException extends Exception {
     }
 
 
-    public MallException(MallExceptionEnum mallExceptionEnum){
-        this(mallExceptionEnum.getCode(),mallExceptionEnum.getMsg());
+    public MallException(MallExceptionEnum mallExceptionEnum) {
+        this(mallExceptionEnum.getCode(), mallExceptionEnum.getMsg());
     }
 
-    public Integer getCode(){
-        return  code;
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }
