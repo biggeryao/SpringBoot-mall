@@ -7,8 +7,13 @@ public enum MallExceptionEnum {
     PASSWORD_TOO_SHORT(10003, "密码长度不能少于八位"),
 
     NAME_EXISTED(10004, "不允许重名"),
-    INSERT_FAIL(10004, "插入失败，请重试"),
-    SYSTEM_ERROR(20000,"系统异常");
+    INSERT_FAIL(10005, "插入失败，请重试"),
+    WRONG_PASSWORD(10006, "密码错误"),
+    NEED_LOGIN(10007, "用户未登录"),
+    UPDATE_FAILED(10008, "更新失败"),
+
+    NEED_ADMIN(10009, "无管理员权限"),
+    SYSTEM_ERROR(20000, "系统异常");
 
     Integer code;
 

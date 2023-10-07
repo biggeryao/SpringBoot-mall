@@ -35,8 +35,41 @@ public class UserServiceImpl implements UserService {
         user.setPassword(MD5Util.getMD5Str(password));
         user.setUsername(userName);
         int count = userMapper.insertSelective(user);
-        if(count==0){
+        if (count == 0) {
             throw new MallException(MallExceptionEnum.INSERT_FAIL);
         }
+    }
+
+
+    @Override
+    public User login(String userName, String password) throws MallException {
+        String ma5Password = null;
+        try {
+            ma5Password = MD5Util.getMD5Str(password);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
+        User user = userMapper.selectLogin(userName, ma5Password);
+
+        if (user == null) {
+            throw new MallException(MallExceptionEnum.WRONG_PASSWORD);
+        }
+        return user;
+    }
+
+    @Override
+    public void updateInformation(User user) throws MallException {
+        int updateCount = userMapper.updateByPrimaryKeySelective(user);
+        if (updateCount > 1) {
+            throw new MallException(MallExceptionEnum.UPDATE_FAILED);
+        }
+
+    }
+
+    @Override
+    public boolean checkAdminRole(User user) {
+        //1：普通用户 2：管理员
+        return user.getRole().equals(2);
     }
 }

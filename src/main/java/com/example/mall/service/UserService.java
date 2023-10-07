@@ -10,4 +10,10 @@ public interface UserService {
 
 
      void  register(String userName,String password) throws MallException, NoSuchAlgorithmException;
+
+    User login(String userName, String password) throws MallException;
+
+    void updateInformation(User user) throws MallException;
+
+    boolean checkAdminRole(User user);
 }
