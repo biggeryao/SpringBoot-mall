@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.security.NoSuchAlgorithmException;
+
 @Controller
 public class UserController {
     @Autowired
@@ -27,7 +29,7 @@ public class UserController {
 
     @PostMapping("/register")
     @ResponseBody
-    public ApiRestResponse register(@RequestParam("userName") String userName, @RequestParam("password") String password) throws MallException {
+    public ApiRestResponse register(@RequestParam("userName") String userName, @RequestParam("password") String password) throws MallException, NoSuchAlgorithmException {
         if (StringUtils.isEmpty(userName)) {
             return ApiRestResponse.error(MallExceptionEnum.NEED_USER_NAME);
         }

@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Object handleMallException(MallException e) {
         log.error("MallException", e);
-        return ApiRestResponse.error(e.getCode(),e.getMessage());
+        return ApiRestResponse.error(e.getCode(), e.getMessage());
     }
 
 
