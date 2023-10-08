@@ -7,6 +7,8 @@ import com.example.mall.model.pojo.User;
 import com.example.mall.model.request.AddCategoryReq;
 import com.example.mall.service.CategoryService;
 import com.example.mall.service.UserService;
+import com.example.mall.vo.CategoryVo;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class CategoryController {
@@ -54,6 +57,23 @@ public class CategoryController {
     public ApiRestResponse deleteCategory(@RequestParam Integer id) {
         categoryService.delete(id);
         return ApiRestResponse.success();
+    }
+    @ApiOperation("后台目录列表")
+    @PostMapping("admin/category/list")
+    @ResponseBody
+    public  ApiRestResponse listCategoryForAdmin(@RequestParam Integer pageNum,@RequestParam Integer pageSize){
 
+        PageInfo pageInfo = categoryService.listCategoryForAdmin(pageNum, pageSize);
+
+        return ApiRestResponse.success(pageInfo);
+    }
+    @ApiOperation("前台目录列表")
+    @PostMapping("category/list")
+    @ResponseBody
+    public  ApiRestResponse listCategoryForCustomer(){
+
+        List<CategoryVo> categoryVos = categoryService.listCategoryForCustomer();
+        System.out.println(categoryVos);
+        return ApiRestResponse.success(categoryVos);
     }
 }

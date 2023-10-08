@@ -6,9 +6,19 @@ import com.example.mall.model.dao.CategoryMapper;
 import com.example.mall.model.pojo.Category;
 import com.example.mall.model.request.AddCategoryReq;
 import com.example.mall.service.CategoryService;
+import com.example.mall.vo.CategoryVo;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import springfox.documentation.annotations.Cacheable;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -41,6 +51,38 @@ public class CategoryServiceImpl implements CategoryService {
         int count = categoryMapper.deleteByPrimaryKey(id);
         if (count == 0) {
             throw new MallException(MallExceptionEnum.DELETE_FAILED);
+        }
+    }
+
+    @Override
+    public PageInfo listCategoryForAdmin(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize, "type,order_num");
+        List<Category> categoryList = categoryMapper.selectList();
+
+        PageInfo pageInfo = new PageInfo(categoryList);
+
+        return pageInfo;
+    }
+
+    @Override
+    @Cacheable(value="listCategoryForCustomer")
+    public List<CategoryVo> listCategoryForCustomer() {
+        ArrayList<CategoryVo> categoryVoList = new ArrayList<>();
+        recursivelyFindCategories(categoryVoList, 0);
+        return categoryVoList;
+    }
+
+    private void recursivelyFindCategories(List<CategoryVo> CategoryVoList, Integer parentId) {
+        List<Category> categoryList = categoryMapper.selectCategoriesByParentId(parentId);
+        if (!CollectionUtils.isEmpty(categoryList)) {
+            for (int i = 0; i < categoryList.size(); i++) {
+                Category category = categoryList.get(i);
+                CategoryVo categoryVo = new CategoryVo();
+                BeanUtils.copyProperties(category, categoryVo);
+                CategoryVoList.add(categoryVo);
+                recursivelyFindCategories(categoryVo.getChildCategory(), categoryVo.getId());
+            }
+
         }
     }
 }
