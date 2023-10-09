@@ -1,9 +1,8 @@
 package com.example.mall.service;
 
 import com.example.mall.model.request.AddCategoryReq;
-import com.example.mall.vo.CategoryVo;
+import com.example.mall.model.vo.CategoryVo;
 import com.github.pagehelper.PageInfo;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

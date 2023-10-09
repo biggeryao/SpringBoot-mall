@@ -7,7 +7,7 @@ import com.example.mall.model.pojo.User;
 import com.example.mall.model.request.AddCategoryReq;
 import com.example.mall.service.CategoryService;
 import com.example.mall.service.UserService;
-import com.example.mall.vo.CategoryVo;
+import com.example.mall.model.vo.CategoryVo;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

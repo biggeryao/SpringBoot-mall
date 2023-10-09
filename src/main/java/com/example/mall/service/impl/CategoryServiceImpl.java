@@ -6,10 +6,9 @@ import com.example.mall.model.dao.CategoryMapper;
 import com.example.mall.model.pojo.Category;
 import com.example.mall.model.request.AddCategoryReq;
 import com.example.mall.service.CategoryService;
-import com.example.mall.vo.CategoryVo;
+import com.example.mall.model.vo.CategoryVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,6 @@ import org.springframework.util.CollectionUtils;
 import springfox.documentation.annotations.Cacheable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Service

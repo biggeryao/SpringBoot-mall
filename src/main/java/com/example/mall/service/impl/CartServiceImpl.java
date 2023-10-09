@@ -8,7 +8,7 @@ import com.example.mall.model.dao.ProductMapper;
 import com.example.mall.model.pojo.Cart;
 import com.example.mall.model.pojo.Product;
 import com.example.mall.service.CartService;
-import com.example.mall.vo.CartVo;
+import com.example.mall.model.vo.CartVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +21,16 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private CartMapper cartMapper;
+
+    @Override
+    public  List<CartVo> list(Integer userId){
+        List<CartVo> cartVos = cartMapper.selectList(userId);
+        for (int i = 0; i < cartVos.size(); i++) {
+            CartVo cartVo = cartVos.get(i);
+            cartVo.setTotalPrice(cartVo.getPrice()*cartVo.getQuantity());
+        }
+        return  cartVos;
+    }
 
     @Override
     public List<CartVo> add(Integer userId, Integer productId, Integer count) {
@@ -43,7 +53,7 @@ public class CartServiceImpl implements CartService {
             cartNew.setSelected(Constant.Cart.CHECKED);
             cartMapper.updateByPrimaryKeySelective(cartNew);
         }
-        return  null;
+        return  this.list(userId);
     }
 
     private void validProduct(Integer productId, Integer count) {

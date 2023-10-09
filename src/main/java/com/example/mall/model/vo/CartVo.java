@@ -1,4 +1,4 @@
-package com.example.mall.vo;
+package com.example.mall.model.vo;
 
 public class CartVo {
 
