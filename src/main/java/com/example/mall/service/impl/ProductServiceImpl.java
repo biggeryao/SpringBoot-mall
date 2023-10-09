@@ -52,6 +52,10 @@ public class ProductServiceImpl implements ProductService {
         if (count == 0) {
             throw new MallException(MallExceptionEnum.DELETE_FAILED);
         }
+    }
 
+    @Override
+    public void  batchUpdateSellStatus (Integer[] ids,Integer sellStatus){
+        productMapper.batchUpdateSellStatus(ids,sellStatus);
     }
 }

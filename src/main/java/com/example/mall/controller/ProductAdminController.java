@@ -93,4 +93,13 @@ public class ProductAdminController {
         productService.delete(id);
         return ApiRestResponse.success();
     }
+
+    @PostMapping("admin/product/batchUpdateSellStatus")
+    public ApiRestResponse batchUpdateSellStatus(@RequestParam Integer[] ids, @RequestParam Integer sellStatus) {
+
+        productService.batchUpdateSellStatus(ids, sellStatus);
+
+        return ApiRestResponse.success();
+
+    }
 }
