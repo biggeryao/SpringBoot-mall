@@ -8,6 +8,8 @@ import com.example.mall.model.pojo.Product;
 import com.example.mall.model.request.AddProductReq;
 import com.example.mall.model.request.UpdateProductReq;
 import com.example.mall.service.ProductService;
+import com.github.pagehelper.PageInfo;
+import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -102,4 +104,12 @@ public class ProductAdminController {
         return ApiRestResponse.success();
 
     }
+
+    @PostMapping("admin/product/list")
+    public  ApiRestResponse list (@RequestParam Integer pageNum,@RequestParam Integer pageSize){
+        PageInfo pageInfo = productService.listForAdmin(pageNum, pageSize);
+
+        return  ApiRestResponse.success(pageInfo);
+    }
+
 }
