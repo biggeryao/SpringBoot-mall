@@ -28,4 +28,30 @@ public class ProductServiceImpl implements ProductService {
             throw new MallException(MallExceptionEnum.CREATE_FAILED);
         }
     }
+
+    @Override
+    public void update(Product product) {
+        Product productOld = productMapper.selectByName(product.getName());
+        if (productOld != null && !productOld.getId().equals(product.getId())) {
+            throw new MallException(MallExceptionEnum.NAME_EXISTED);
+        }
+        int count = productMapper.updateByPrimaryKeySelective(product);
+        if (count == 0) {
+            throw new MallException(MallExceptionEnum.UPDATE_FAILED);
+        }
+
+    }
+
+    @Override
+    public void delete(Integer id) {
+        Product productOld = productMapper.selectByPrimaryKey(id);
+        if (productOld == null) {
+            throw new MallException(MallExceptionEnum.DELETE_FAILED);
+        }
+        int count = productMapper.deleteByPrimaryKey(id);
+        if (count == 0) {
+            throw new MallException(MallExceptionEnum.DELETE_FAILED);
+        }
+
+    }
 }

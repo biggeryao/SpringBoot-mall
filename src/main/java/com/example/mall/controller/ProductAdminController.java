@@ -4,10 +4,12 @@ import com.example.mall.common.ApiRestResponse;
 import com.example.mall.common.Constant;
 import com.example.mall.exception.MallException;
 import com.example.mall.exception.MallExceptionEnum;
+import com.example.mall.model.pojo.Product;
 import com.example.mall.model.request.AddProductReq;
+import com.example.mall.model.request.UpdateProductReq;
 import com.example.mall.service.ProductService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,7 +65,7 @@ public class ProductAdminController {
         try {
             return ApiRestResponse.success(getHost(new URI(httpServletRequest.getRequestURL() + "")) + "/images/" + newFileName);
         } catch (URISyntaxException e) {
-            return  ApiRestResponse.error(MallExceptionEnum.UPLOAD_FAILED);
+            return ApiRestResponse.error(MallExceptionEnum.UPLOAD_FAILED);
         }
     }
 
@@ -75,5 +77,20 @@ public class ProductAdminController {
             effectiveURI = null;
         }
         return effectiveURI;
+    }
+
+    @PostMapping("admin/product/update")
+    public ApiRestResponse updateProduct(@Valid @RequestBody UpdateProductReq updateProductReq) {
+
+        Product product = new Product();
+        BeanUtils.copyProperties(updateProductReq, product);
+        productService.update(product);
+        return ApiRestResponse.success();
+    }
+
+    @PostMapping("admin/product/delete")
+    public ApiRestResponse deleteProduct(@RequestParam Integer id) {
+        productService.delete(id);
+        return ApiRestResponse.success();
     }
 }
