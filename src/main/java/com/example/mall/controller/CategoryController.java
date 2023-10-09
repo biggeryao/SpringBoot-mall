@@ -72,8 +72,7 @@ public class CategoryController {
     @ResponseBody
     public  ApiRestResponse listCategoryForCustomer(){
 
-        List<CategoryVo> categoryVos = categoryService.listCategoryForCustomer();
-        System.out.println(categoryVos);
+        List<CategoryVo> categoryVos = categoryService.listCategoryForCustomer(0);
         return ApiRestResponse.success(categoryVos);
     }
 }
