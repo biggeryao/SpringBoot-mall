@@ -23,13 +23,13 @@ public class CartServiceImpl implements CartService {
     private CartMapper cartMapper;
 
     @Override
-    public  List<CartVo> list(Integer userId){
+    public List<CartVo> list(Integer userId) {
         List<CartVo> cartVos = cartMapper.selectList(userId);
         for (int i = 0; i < cartVos.size(); i++) {
             CartVo cartVo = cartVos.get(i);
-            cartVo.setTotalPrice(cartVo.getPrice()*cartVo.getQuantity());
+            cartVo.setTotalPrice(cartVo.getPrice() * cartVo.getQuantity());
         }
-        return  cartVos;
+        return cartVos;
     }
 
     @Override
@@ -53,7 +53,36 @@ public class CartServiceImpl implements CartService {
             cartNew.setSelected(Constant.Cart.CHECKED);
             cartMapper.updateByPrimaryKeySelective(cartNew);
         }
-        return  this.list(userId);
+        return this.list(userId);
+    }
+
+    @Override
+    public List<CartVo> update(Integer userId, Integer productId, Integer count) {
+        validProduct(productId, count);
+        Cart cart = cartMapper.selectCartByUserIdAndProductId(userId, productId);
+        if (cart == null) {
+            throw new MallException(MallExceptionEnum.UPDATE_FAILED);
+        } else {
+            Cart cartNew = new Cart();
+            cartNew.setQuantity(count);
+            cartNew.setId(cart.getId());
+            cartNew.setProductId(cart.getProductId());
+            cartNew.setUserId(cart.getUserId());
+            cartNew.setSelected(Constant.Cart.CHECKED);
+            cartMapper.updateByPrimaryKeySelective(cartNew);
+        }
+        return this.list(userId);
+    }
+
+    @Override
+    public List<CartVo> delete(Integer userId, Integer productId) {
+        Cart cart = cartMapper.selectCartByUserIdAndProductId(userId, productId);
+        if (cart == null) {
+            throw new MallException(MallExceptionEnum.DELETE_FAILED);
+        } else {
+            cartMapper.deleteByPrimaryKey(cart.getId());
+        }
+        return this.list(userId);
     }
 
     private void validProduct(Integer productId, Integer count) {
