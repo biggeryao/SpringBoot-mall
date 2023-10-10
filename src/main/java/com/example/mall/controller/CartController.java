@@ -34,14 +34,20 @@ public class CartController {
     }
 
     @PostMapping("/update")
-    public ApiRestResponse update (Integer productId,Integer count){
+    public ApiRestResponse update(Integer productId, Integer count) {
         List<CartVo> list = cartService.update(UserFilter.currentUser.getId(), productId, count);
         return ApiRestResponse.success(list);
     }
 
     @PostMapping("/delete")
-    public ApiRestResponse delete(@RequestParam Integer productId){
+    public ApiRestResponse delete(@RequestParam Integer productId) {
         List<CartVo> list = cartService.delete(UserFilter.currentUser.getId(), productId);
+        return ApiRestResponse.success(list);
+    }
+
+    @PostMapping("/select")
+    public ApiRestResponse select(@RequestParam Integer productId, @RequestParam Integer selected) {
+        List<CartVo> list = cartService.selected(UserFilter.currentUser.getId(), productId, selected);
         return ApiRestResponse.success(list);
     }
 }
