@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -124,6 +125,24 @@ public class OrderServiceImpl implements OrderService {
         }
         OrderVo orderVo=getOrderVo(order);
         return  orderVo;
+    }
+    @Override
+    public  void cancel(String orderNo){
+        Order order = orderMapper.selectByOrderNo(orderNo);
+        if(order==null){
+            throw new MallException(MallExceptionEnum.NO_ORDER);
+        }
+        Integer id = UserFilter.currentUser.getId();
+        if(!order.getUserId().equals(id)){
+            throw new MallException(MallExceptionEnum.NOT_YOUR_ORDER);
+        }
+        if(order.getOrderStatus().equals(Constant.OrderStatusEnum.NOT_PAID.getCode())){
+            order.setOrderStatus(Constant.OrderStatusEnum.CANCELED.getCode());
+            order.setEndTime(new Date());
+            orderMapper.updateByPrimaryKeySelective(order);
+        }else {
+            throw  new MallException(MallExceptionEnum.WRONG_ORDER_STATUS);
+        }
     }
 
     private OrderVo getOrderVo(Order order) {

@@ -5,6 +5,7 @@ import com.example.mall.model.request.CreateOrderReq;
 import com.example.mall.model.vo.OrderVo;
 import com.example.mall.service.CartService;
 import com.example.mall.service.OrderService;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,12 @@ public class OrderController {
     public ApiRestResponse detail(@RequestParam String orderNo){
         OrderVo detail = orderService.detail(orderNo);
         return  ApiRestResponse.success(detail);
+    }
+
+    @PostMapping("order/cancel")
+    public ApiRestResponse cancel(@RequestParam String orderNo){
+       orderService.cancel(orderNo);
+       return  ApiRestResponse.success();
     }
 
 }
