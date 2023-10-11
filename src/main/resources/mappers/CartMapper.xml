@@ -124,7 +124,7 @@
     </select>
     <select id="selectList" resultType="com.example.mall.model.vo.CartVo" parameterType="java.lang.Integer">
         select c.id       as id,
-               p.id       as product_id,
+               p.id       as productId,
                c.user_id  as userId,
                c.quantity as quantity,
                c.selected as selected,

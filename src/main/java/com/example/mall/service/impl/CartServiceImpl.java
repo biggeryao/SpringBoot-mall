@@ -25,6 +25,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<CartVo> list(Integer userId) {
         List<CartVo> cartVos = cartMapper.selectList(userId);
+        System.out.println(cartVos);
         for (int i = 0; i < cartVos.size(); i++) {
             CartVo cartVo = cartVos.get(i);
             cartVo.setTotalPrice(cartVo.getPrice() * cartVo.getQuantity());
