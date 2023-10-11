@@ -13,15 +13,17 @@ import com.example.mall.model.pojo.OrderItem;
 import com.example.mall.model.pojo.Product;
 import com.example.mall.model.request.CreateOrderReq;
 import com.example.mall.model.vo.CartVo;
+import com.example.mall.model.vo.OrderItemVo;
+import com.example.mall.model.vo.OrderVo;
 import com.example.mall.service.CartService;
 import com.example.mall.service.OrderService;
 import com.example.mall.utils.OrderCodeFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -109,6 +111,39 @@ public class OrderServiceImpl implements OrderService {
         //返回结果
         return orderCode;
     }
+
+    @Override
+    public OrderVo detail(String orderNo){
+        Order order = orderMapper.selectByOrderNo(orderNo);
+        if(order==null){
+            throw  new MallException(MallExceptionEnum.NO_ORDER);
+        }
+        Integer id = UserFilter.currentUser.getId();
+        if(!order.getUserId().equals(id)){
+            throw  new MallException(MallExceptionEnum.NOT_YOUR_ORDER);
+        }
+        OrderVo orderVo=getOrderVo(order);
+        return  orderVo;
+    }
+
+    private OrderVo getOrderVo(Order order) {
+
+        OrderVo orderVo = new OrderVo();
+        BeanUtils.copyProperties(order,orderVo);
+        List<OrderItem> orderItemList = orderItemMapper.selectByOrderNo(order.getOrderNo());
+        ArrayList<OrderItemVo> orderItemVoList = new ArrayList<>();
+        for (int i = 0; i < orderItemList.size(); i++) {
+            OrderItem orderItem = orderItemList.get(i);
+            OrderItemVo orderItemVo = new OrderItemVo();
+            BeanUtils.copyProperties(orderItem,orderItemVo);
+            orderItemVoList.add(orderItemVo);
+        }
+        orderVo.setOrderItemVoList(orderItemVoList);
+        orderVo.setOrderStatusName(Constant.OrderStatusEnum.codeOf(orderVo.getOrderStatus()).getValue());
+        return  orderVo;
+
+    }
+
 
     private Integer totalPrice(List<OrderItem> orderItemList) {
         Integer price=0;
